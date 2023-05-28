@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Samantha Miao">
+
+<title>assignment1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="assignment1_files/libs/clipboard/clipboard.min.js"></script>
+<script src="assignment1_files/libs/quarto-html/quarto.js"></script>
+<script src="assignment1_files/libs/quarto-html/popper.min.js"></script>
+<script src="assignment1_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="assignment1_files/libs/quarto-html/anchor.min.js"></script>
+<link href="assignment1_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="assignment1_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="assignment1_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="assignment1_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="assignment1_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Assignment 1</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Samantha Miao </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p><strong>Overview:</strong> <em>For this assignment, you are going to download some variables using the <code>wbstats</code> and <code>vdemdata</code> packages. Then you are going to wrangle these data and merge the two data sets into one and analyze how they relate to women’s representation in national parliaments. Do your work for each step in the code chunks provided. Be sure to label your code chunks.</em></p>
+<section id="step-1-download-data-from-the-v-dem-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="step-1-download-data-from-the-v-dem-dataset">Step 1: Download data from the V-Dem Dataset</h2>
+<p><em>Look at the V-Dem <a href="https://www.v-dem.net/data/reference-documents/">codebook</a>. Identify two measures of democracy that are not the polyarchy score that we used in Module 1.2.</em></p>
+<p><em>Try to pick variables that will relate to women’s representation and read the description of the variable to make sure that it includes data for a sufficient number of years, e.g.&nbsp;that the data will be somewhat recent. Select the most recent 20 years of data for your analysis.</em></p>
+<p><em>Make sure to load the packages that you need and <code>glimpse()</code> the data or <code>View()</code> it to make sure that it downloaded properly.</em> ::: {.cell lable=‘v-dem’}</p>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vdemdata) </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'janitor'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the data</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>democracy <span class="ot">&lt;-</span> vdem <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2003</span>)  <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    year, </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">country =</span> country_name,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">vdem_ctry_id =</span> country_id,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">liberaldem =</span> v2x_libdem,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">deliberativedem =</span> v2x_delibdem,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">gdp_pc =</span> e_gdppc, </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">region =</span> e_regionpol_6C,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">yearedu=</span> e_peaveduc</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">region =</span> <span class="fu">case_match</span>(region,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                     <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Eastern Europe"</span>, </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                     <span class="dv">2</span> <span class="sc">~</span> <span class="st">"Latin America"</span>,  </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                     <span class="dv">3</span> <span class="sc">~</span> <span class="st">"Middle East"</span>,   </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                     <span class="dv">4</span> <span class="sc">~</span> <span class="st">"Africa"</span>, </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                     <span class="dv">5</span> <span class="sc">~</span> <span class="st">"The West"</span>, </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                     <span class="dv">6</span> <span class="sc">~</span> <span class="st">"Asia"</span>) )</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># View the data</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(democracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3,568
+Columns: 8
+$ year            &lt;dbl&gt; 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, …
+$ country         &lt;chr&gt; "Mexico", "Mexico", "Mexico", "Mexico", "Mexico", "Mex…
+$ vdem_ctry_id    &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
+$ liberaldem      &lt;dbl&gt; 0.503, 0.510, 0.510, 0.482, 0.454, 0.456, 0.455, 0.459…
+$ deliberativedem &lt;dbl&gt; 0.562, 0.570, 0.570, 0.544, 0.536, 0.532, 0.529, 0.537…
+$ gdp_pc          &lt;dbl&gt; 13.713, 14.061, 14.332, 14.584, 14.729, 14.771, 14.425…
+$ region          &lt;chr&gt; "Latin America", "Latin America", "Latin America", "La…
+$ yearedu         &lt;dbl&gt; 8.165, 8.210, 8.255, 8.300, 8.345, 8.390, 8.435, 8.480…</code></pre>
+</div>
+<p>:::</p>
+</section>
+<section id="step-2-download-data-from-the-world-bank" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-download-data-from-the-world-bank">Step 2: Download data from the World Bank</h2>
+<p><em>Next, download the variable on women’s represenation that we used in Module 1.2 (“SG.GEN.PARL.ZS”) and at least one additional measure related to women’s empowerment. Go to the <a href="https://databank.worldbank.org/source/world-development-indicators">WDI</a> site the wb_search() function to identify relevant variables. Download the most recent 20 years of data for your analysis.</em></p>
+<p><em>Make sure that the indicator has enough data to conduct your analysis, i.e.&nbsp;that it has data for most countries and years.</em></p>
+<div class="cell" data-lable="wb_stat">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wbstats)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor) </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#fsoe_indicators &lt;- wb_search("Female share of employment") # store the list of indicators</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#print(fsoe_indicators, n=26) # view the indicators</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Store the list of indicators in an object</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>indicators <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"fsoe"</span> <span class="ot">=</span> <span class="st">"SL.EMP.SMGT.FE.ZS"</span>, <span class="st">"women_rep"</span> <span class="ot">=</span> <span class="st">"SG.GEN.PARL.ZS"</span>) </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the data  </span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>women_emp <span class="ot">&lt;-</span> <span class="fu">wb_data</span>(indicators, <span class="at">mrv =</span> <span class="dv">20</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>iso2c) <span class="sc">|&gt;</span> </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">year =</span> date) <span class="sc">|&gt;</span> </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">fsoe =</span> <span class="fu">round_to_fraction</span>(fsoe, <span class="at">denominator =</span> <span class="dv">100</span>), </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">women_rep =</span> <span class="fu">round_to_fraction</span>(women_rep, <span class="at">denominator =</span> <span class="dv">100</span>) </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co"># View the data</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(women_emp) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 4,340
+Columns: 5
+$ iso3c     &lt;chr&gt; "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW…
+$ country   &lt;chr&gt; "Aruba", "Aruba", "Aruba", "Aruba", "Aruba", "Aruba", "Aruba…
+$ year      &lt;dbl&gt; 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, …
+$ women_rep &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+$ fsoe      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</code></pre>
+</div>
+</div>
+</section>
+<section id="step-3-merge-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-merge-the-data">Step 3: Merge the data</h2>
+<p><em>Now add country codes using the <code>countrycode</code> package and merge the data using <code>left_join()</code>.</em></p>
+<div class="cell" data-lable="country_code">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load countrycode</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(countrycode)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new iso3c variable</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>democracy <span class="ot">&lt;-</span> democracy <span class="sc">|&gt;</span>    </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">iso3c =</span> <span class="fu">countrycode</span>(<span class="at">sourcevar =</span> vdem_ctry_id, </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">origin =</span> <span class="st">"vdem"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">destination =</span> <span class="st">"wb"</span>))  <span class="sc">|&gt;</span> </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(iso3c, <span class="at">.after =</span> vdem_ctry_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `iso3c = countrycode(sourcevar = vdem_ctry_id, origin = "vdem",
+  destination = "wb")`.
+Caused by warning in `countrycode_convert()`:
+! Some values were not matched unambiguously: 128, 139, 236</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(democracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3,568
+Columns: 9
+$ year            &lt;dbl&gt; 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, …
+$ country         &lt;chr&gt; "Mexico", "Mexico", "Mexico", "Mexico", "Mexico", "Mex…
+$ vdem_ctry_id    &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
+$ iso3c           &lt;chr&gt; "MEX", "MEX", "MEX", "MEX", "MEX", "MEX", "MEX", "MEX"…
+$ liberaldem      &lt;dbl&gt; 0.503, 0.510, 0.510, 0.482, 0.454, 0.456, 0.455, 0.459…
+$ deliberativedem &lt;dbl&gt; 0.562, 0.570, 0.570, 0.544, 0.536, 0.532, 0.529, 0.537…
+$ gdp_pc          &lt;dbl&gt; 13.713, 14.061, 14.332, 14.584, 14.729, 14.771, 14.425…
+$ region          &lt;chr&gt; "Latin America", "Latin America", "Latin America", "La…
+$ yearedu         &lt;dbl&gt; 8.165, 8.210, 8.255, 8.300, 8.345, 8.390, 8.435, 8.480…</code></pre>
+</div>
+</div>
+<div class="cell" data-lable="merge_code">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load readr</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform left join using common iso3c variable and year</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>dem_women1 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(democracy, women_emp, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"iso3c"</span>, <span class="st">"year"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">country =</span> country.x) <span class="sc">|&gt;</span> <span class="co"># rename country.x</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>country.y)             <span class="co"># crop country.y</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># View the data</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(democracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3,568
+Columns: 9
+$ year            &lt;dbl&gt; 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, …
+$ country         &lt;chr&gt; "Mexico", "Mexico", "Mexico", "Mexico", "Mexico", "Mex…
+$ vdem_ctry_id    &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
+$ iso3c           &lt;chr&gt; "MEX", "MEX", "MEX", "MEX", "MEX", "MEX", "MEX", "MEX"…
+$ liberaldem      &lt;dbl&gt; 0.503, 0.510, 0.510, 0.482, 0.454, 0.456, 0.455, 0.459…
+$ deliberativedem &lt;dbl&gt; 0.562, 0.570, 0.570, 0.544, 0.536, 0.532, 0.529, 0.537…
+$ gdp_pc          &lt;dbl&gt; 13.713, 14.061, 14.332, 14.584, 14.729, 14.771, 14.425…
+$ region          &lt;chr&gt; "Latin America", "Latin America", "Latin America", "La…
+$ yearedu         &lt;dbl&gt; 8.165, 8.210, 8.255, 8.300, 8.345, 8.390, 8.435, 8.480…</code></pre>
+</div>
+</div>
+</section>
+<section id="step-4-summarize-your-combined-data-set" class="level2">
+<h2 class="anchored" data-anchor-id="step-4-summarize-your-combined-data-set">Step 4: Summarize your combined data set</h2>
+<p><em>Use <code>group_by()</code>, <code>summarize()</code> and <code>arrange()</code> to glean insights about your data. For example, how do regions compare on mean values of women’s representation and how do these values relate to the values of other variables in your data set? Which countries stand out in terms of women’s representation? Etc.</em></p>
+<div class="cell" data-lable="join">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group_by(), summarize() and arrange()</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>dem_summary <span class="ot">&lt;-</span> dem_women1 <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region)  <span class="sc">|&gt;</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(  </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">deliberativedem =</span> <span class="fu">mean</span>(deliberativedem, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">liberaldem =</span> <span class="fu">mean</span>(liberaldem, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">gdp_pc =</span> <span class="fu">mean</span>(gdp_pc, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">yearedu=</span> <span class="fu">median</span>(yearedu, <span class="at">na.rm=</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fsoe =</span> <span class="fu">mean</span>(fsoe, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">women_rep =</span> <span class="fu">mean</span>(women_rep, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(liberaldem)) </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co"># View the data</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(dem_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 6
+Columns: 7
+$ region          &lt;chr&gt; "The West", "Latin America", "Eastern Europe", "Asia",…
+$ deliberativedem &lt;dbl&gt; 0.7924854, 0.4983540, 0.4059983, 0.3373982, 0.3185899,…
+$ liberaldem      &lt;dbl&gt; 0.8067062, 0.4905880, 0.4289600, 0.3268000, 0.2941640,…
+$ gdp_pc          &lt;dbl&gt; 42.279618, 11.103501, 14.852812, 11.644871, 5.135589, …
+$ yearedu         &lt;dbl&gt; 11.8120, 8.2680, 10.8180, 7.3695, 4.4800, 7.4885
+$ fsoe            &lt;dbl&gt; 29.42128, 37.70135, 33.34260, 20.18613, 30.90000, 20.1…
+$ women_rep       &lt;dbl&gt; 29.83010, 23.55159, 19.74641, 15.66137, 19.25627, 11.5…</code></pre>
+</div>
+</div>
+<p>For the woman’s representation, The west region has highest mean value at 29.83%; Latin America got 23.6% mean value, Eastern Europe got 19.75% mean value; Africa got 19.3% mean value; Asia got 15.7% mean value; Middle East 11.6% mean value. In terms of women’s representation, the West leads the way, followed by Latin America. The West region also has the highest values for deliberative democracy at 0.79; liberal democracy at 0.81; GDP per capita at 42.28; years of education at 11.81. The female share of employment in senior and middle management at 29.4. The Latin America has the values for deliberative democracy at 0.5; liberal democracy at 0.5; GDP per capita at 11.1; years of education at 8.3. The female share of employment in senior and middle management at 37.7, which is the highest value in six regions. These factors reflect a common trend. Greater women’s representation is typically connected with greater values in deliberative democracy, liberal democracy, GDP per capita, average years of education, and female share of employment in senior and middle management.</p>
+</section>
+<section id="step-5-interpret-your-data" class="level2">
+<h2 class="anchored" data-anchor-id="step-5-interpret-your-data">Step 5: Interpret your data</h2>
+<p><em>Write a paragraph or so relating your insights to the Norris reading about electoral reform and women’s representation. Picking a handful of country cases from your data, how does your analysis relate to her arguments about the relevance of electoral systems, statutory quotas, reserved seats or voluntary quotas?</em></p>
+<p>When we change the data”region” to “country” we can see differnt countries. Here, I will use Netherlands data to relating the article from Norris. The Netherland got deliberative democracy at 0.8; liberal democracy at 0.82 ; GDP per capita at 45.2; years of education at 11.5. The female share of employment in senior and middle management at 25.1 and women’s representation at 37.9. With a women’s representation of 37.9% in the Netherlands from the data, it show Norris statement on electoral reform and women’s representation apply. Norris contends that proportional representation (PR) election systems elect more women than others. This is in step with the Netherlands electoral system, which is based on proportional representation and has a relatively high rate of female representation. Norris also considers legislative quotas, which might increase women’s representation in parliament. Though there is no particular data on statutory quotas in the data set. We could see that in Netherlands deliberative democracy at 0.8 and liberal democracy at 0.82 which stand at a higher value in all countries. It may be assumed that the establishment of such a system could increase gender balance in the country’s parliament. Finally, Norris suggests voluntary gender quotas as another policy option that has resulted in increasing female representation. According to our data, in the last 20 years，the average female education year is 11.53 and the female share of employment in senior and middle management at 25.1, allowing more women in the Netherlands got more power to express themselves and protect their own rights and interests. The possibility for future use of such an approach is an excellent recommendation for election reform aimed at increasing women’s representation.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
