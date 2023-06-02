@@ -1,10 +1,11 @@
----
+ ---
 title: "Assignment 1"
-author: "Your Name"
+author: "Samantha Miao"
 format: html
 ---
 
 **Overview:** *For this assignment, you are going to download some variables using the `wbstats` and `vdemdata` packages. Then you are going to wrangle these data and merge the two data sets into one and analyze how they relate to women's representation in national parliaments. Do your work for each step in the code chunks provided. Be sure to label your code chunks.* 
+
 
 ## Step 1: Download data from the V-Dem Dataset
 
@@ -13,26 +14,107 @@ format: html
 *Try to pick variables that will relate to women's representation and read the description of the variable to make sure that it includes data for a sufficient number of years, e.g. that the data will be somewhat recent. Select the most recent 20 years of data for your analysis.* 
 
 *Make sure to load the packages that you need and `glimpse()` the data or `View()` it to make sure that it downloaded properly.* 
-
 ```{r}
+#| lable: v-dem
+# Load packages
+library(vdemdata) 
+library(dplyr)
+library(janitor) 
+
+# Download the data
+democracy <- vdem |> 
+  filter(year >= 2003)  |> 
+  select(
+    year, 
+    country = country_name,
+    vdem_ctry_id = country_id,
+    liberaldem = v2x_libdem,
+    deliberativedem = v2x_delibdem,
+    gdp_pc = e_gdppc, 
+    region = e_regionpol_6C,
+    yearedu= e_peaveduc
+    ) |>
+  mutate(
+    region = case_match(region,
+                     1 ~ "Eastern Europe", 
+                     2 ~ "Latin America",  
+                     3 ~ "Middle East",   
+                     4 ~ "Africa", 
+                     5 ~ "The West", 
+                     6 ~ "Asia") )
+
+# View the data
+glimpse(democracy)
 
 ```
 
-## Step 2: Download data from the World Bank
 
+## Step 2: Download data from the World Bank
 *Next, download the variable on women's represenation that we used in Module 1.2 ("SG.GEN.PARL.ZS") and at least one additional measure related to women's empowerment. Go to the [WDI](https://databank.worldbank.org/source/world-development-indicators) site the wb_search() function to identify relevant variables. Download the most recent 20 years of data for your analysis.* 
 
 *Make sure that the indicator has enough data to conduct your analysis, i.e. that it has data for most countries and years.*
 
 ```{r}
+#| lable: wb_stat
+# Load packages
+library(wbstats)
+library(dplyr)
+library(janitor) 
+
+#fsoe_indicators <- wb_search("Female share of employment") # store the list of indicators
+#print(fsoe_indicators, n=26) # view the indicators
+
+# Store the list of indicators in an object
+indicators <- c("fsoe" = "SL.EMP.SMGT.FE.ZS", "women_rep" = "SG.GEN.PARL.ZS") 
+
+# Download the data  
+women_emp <- wb_data(indicators, mrv = 20) |> 
+  select(!iso2c) |> 
+  rename(year = date) |> 
+  mutate(
+    fsoe = round_to_fraction(fsoe, denominator = 100), 
+    women_rep = round_to_fraction(women_rep, denominator = 100) 
+  )
+
+# View the data
+glimpse(women_emp) 
 
 ```
+
+
+
+
 
 ## Step 3: Merge the data
 
 *Now add country codes using the `countrycode` package and merge the data using `left_join()`.* 
 
 ```{r}
+#| lable: country_code
+# Load countrycode
+library(countrycode)
+
+# Create new iso3c variable
+democracy <- democracy |>    
+  mutate(iso3c = countrycode(sourcevar = vdem_ctry_id, 
+        origin = "vdem",
+        destination = "wb"))  |> 
+  relocate(iso3c, .after = vdem_ctry_id)
+glimpse(democracy)
+```
+
+```{r}
+#| lable: merge_code
+# Load readr
+library(readr)
+
+# Perform left join using common iso3c variable and year
+dem_women1 <- left_join(democracy, women_emp, by = c("iso3c", "year")) |> 
+  rename(country = country.x) |> # rename country.x
+  select(!country.y)             # crop country.y
+
+# View the data
+glimpse(democracy)
 
 ```
 
@@ -41,7 +123,41 @@ format: html
 *Use `group_by()`, `summarize()` and `arrange()` to glean insights about your data. For example, how do regions compare on mean values of women's representation and how do these values relate to the values of other variables in your data set? Which countries stand out in terms of women's representation? Etc.* 
 
 
+```{r}
+#| lable: join
+# group_by(), summarize() and arrange()
+dem_summary <- dem_women1 |> 
+  group_by(region)  |> 
+  summarize(  
+    deliberativedem = mean(deliberativedem, na.rm = TRUE), 
+    liberaldem = mean(liberaldem, na.rm = TRUE),
+    gdp_pc = mean(gdp_pc, na.rm = TRUE), 
+    yearedu= median(yearedu, na.rm= TRUE),
+    fsoe = mean(fsoe, na.rm = TRUE), 
+    women_rep = mean(women_rep, na.rm = TRUE)
+  ) |> 
+  arrange(desc(liberaldem)) 
+
+
+
+# View the data
+glimpse(dem_summary)
+```
+For the woman's representation, The west region has highest mean value at 29.83%; Latin America got 23.6% mean value, Eastern Europe got 19.75% mean value; Africa got 19.3% mean value; Asia got 15.7% mean value; Middle East 11.6% mean value. In terms of women's representation, the West leads the way, followed by Latin America.
+The West region also has the highest values for deliberative democracy at 0.79; liberal democracy at 0.81; GDP per capita at 42.28; years of education at 11.81. The female share of employment in senior and middle management at 29.4.
+The Latin America has the values for deliberative democracy at 0.5; liberal democracy at 0.5; GDP per capita at 11.1; years of education at 8.3. The female share of employment in senior and middle management at 37.7, which is the highest value in six regions.
+These factors reflect a common trend. Greater women's representation is typically connected with greater values in deliberative democracy, liberal democracy, GDP per capita, average years of education, and female share of employment in senior and middle management. 
+
+
+
+
 ## Step 5: Interpret your data
 
 *Write a paragraph or so relating your insights to the Norris reading about electoral reform and women's representation. Picking a handful of country cases from your data, how does your analysis relate to her arguments about the relevance of electoral systems, statutory quotas, reserved seats or voluntary quotas?* 
+
+When we change the data"region" to "country" we can see differnt countries. Here, I will use Netherlands data to relating the article from Norris. The Netherland got deliberative democracy at 0.8; liberal democracy at 0.82 ; GDP per capita at 45.2; years of education at 11.5. The female share of employment in senior and middle management at 25.1 and women's representation at 37.9.
+
+With a women's representation of 37.9% in the Netherlands from the data, it show Norris statement on electoral reform and women's representation apply.   Norris contends that proportional representation (PR) election systems elect more women than others.  This is in step with the Netherlands electoral system, which is based on proportional representation and has a relatively high rate of female representation.
+Norris also considers legislative quotas, which might increase women's representation in parliament. Though there is no particular data on statutory quotas in the data set. We could see that in Netherlands deliberative democracy at 0.8 and liberal democracy at 0.82 which stand at a higher value in all countries. It may be assumed that the establishment of such a system could increase gender balance in the country's parliament. 
+Finally, Norris suggests voluntary gender quotas as another policy option that has resulted in increasing female representation. According to our data, in the last 20 years，the average female education year is 11.53 and the female share of employment in senior and middle management at 25.1, allowing more women in the Netherlands got more power to express themselves and protect their own rights and interests.  The possibility for future use of such an approach is an excellent recommendation for election reform aimed at increasing women's representation.
 
